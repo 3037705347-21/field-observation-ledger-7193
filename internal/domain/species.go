@@ -32,3 +32,11 @@ func (s Species) HasTag(tag string) bool {
 	}
 	return false
 }
+
+func (s Species) Clone() Species {
+	cloned := s
+	if s.Tags != nil {
+		cloned.Tags = append([]string(nil), s.Tags...)
+	}
+	return cloned
+}

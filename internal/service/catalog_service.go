@@ -34,5 +34,5 @@ func (s *CatalogService) Lookup(siteID, speciesID string) (domain.Site, domain.S
 	if err != nil {
 		return domain.Site{}, domain.Species{}, err
 	}
-	return site, species, nil
+	return site, species.Clone(), nil
 }
