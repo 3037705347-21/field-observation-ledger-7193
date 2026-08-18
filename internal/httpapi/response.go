@@ -4,11 +4,18 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+
+	"example.com/field-observation-ledger/internal/domain"
 )
 
 func writeJSON(writer http.ResponseWriter, status int, payload any) {
 	writer.WriteHeader(status)
 	_ = json.NewEncoder(writer).Encode(payload)
+}
+
+func writeSummary(writer http.ResponseWriter, status int, summary domain.Summary) {
+	summary.EnsureMaps()
+	writeJSON(writer, status, summary)
 }
 
 func writeError(writer http.ResponseWriter, status int, message string) {

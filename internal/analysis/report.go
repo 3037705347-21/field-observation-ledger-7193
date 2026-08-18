@@ -4,6 +4,11 @@ import (
 	"example.com/field-observation-ledger/internal/domain"
 )
 
+func PrepareSummary(summary domain.Summary) domain.Summary {
+	summary.EnsureMaps()
+	return summary
+}
+
 func BuildReport(items []domain.Observation, reviewEvents int) domain.Analysis {
 	return domain.Analysis{
 		TopSpecies:   RankSpecies(items, 5),

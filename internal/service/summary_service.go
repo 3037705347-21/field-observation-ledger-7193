@@ -20,6 +20,7 @@ func (s *SummaryService) Build(filter repository.ObservationFilter) domain.Summa
 	for _, item := range items {
 		summary.Add(item)
 	}
+	summary = analysis.PrepareSummary(summary)
 	summary.Analysis = analysis.BuildReport(items, len(items))
 	return summary
 }

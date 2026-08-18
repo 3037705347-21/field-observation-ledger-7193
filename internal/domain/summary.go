@@ -14,10 +14,22 @@ type Summary struct {
 }
 
 func NewSummary() Summary {
-	return Summary{}
+	summary := Summary{}
+	summary.EnsureMaps()
+	return summary
+}
+
+func (s *Summary) EnsureMaps() {
+	if s.BySpecies == nil {
+		s.BySpecies = make(map[string]int)
+	}
+	if s.ByStatus == nil {
+		s.ByStatus = make(map[string]int)
+	}
 }
 
 func (s *Summary) Add(observation Observation) {
+	s.EnsureMaps()
 	s.Total++
 	s.TotalSamples += observation.Count
 	s.BySpecies[observation.SpeciesID] += observation.Count
