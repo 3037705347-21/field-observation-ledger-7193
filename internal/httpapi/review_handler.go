@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"example.com/field-observation-ledger/internal/domain"
-	"example.com/field-observation-ledger/internal/repository"
 	"example.com/field-observation-ledger/internal/service"
 )
 
@@ -31,9 +30,6 @@ func (s *Server) decideObservation(writer http.ResponseWriter, request *http.Req
 	observation, review, err := s.deps.Reviews.Decide(request.PathValue("id"), input.Reviewer, decision, input.Comment)
 	if err != nil {
 		status := http.StatusBadRequest
-		if errors.Is(err, repository.ErrObservationNotFound) {
-			status = http.StatusNotFound
-		}
 		if errors.Is(err, service.ErrObservationState) {
 			status = http.StatusConflict
 		}
