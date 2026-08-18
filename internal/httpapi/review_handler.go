@@ -30,6 +30,9 @@ func (s *Server) decideObservation(writer http.ResponseWriter, request *http.Req
 	observation, review, err := s.deps.Reviews.Decide(request.PathValue("id"), input.Reviewer, decision, input.Comment)
 	if err != nil {
 		status := http.StatusBadRequest
+		if service.IsReviewObservationNotFound(err) {
+			status = http.StatusNotFound
+		}
 		if errors.Is(err, service.ErrObservationState) {
 			status = http.StatusConflict
 		}

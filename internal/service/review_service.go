@@ -24,6 +24,10 @@ func NewReviewService(observations *ObservationService, reviews *repository.Revi
 	return &ReviewService{observations: observations, reviews: reviews, clock: timeSource}
 }
 
+func IsReviewObservationNotFound(err error) bool {
+	return errors.Is(err, repository.ErrObservationNotFound)
+}
+
 func (s *ReviewService) Decide(observationID, reviewer string, decision domain.ReviewDecision, comment string) (domain.Observation, domain.Review, error) {
 	if strings.TrimSpace(reviewer) == "" {
 		return domain.Observation{}, domain.Review{}, ErrReviewerRequired

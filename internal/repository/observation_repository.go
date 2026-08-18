@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 	"sync"
 
@@ -43,14 +44,14 @@ func (r *ObservationRepository) Get(id string) (domain.Observation, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	if id == "" {
-		return domain.Observation{}, ErrObservationNotFound
+		return domain.Observation{}, fmt.Errorf("%w: empty id", ErrObservationNotFound)
 	}
 	if len(r.items) == 0 {
-		return domain.Observation{}, ErrObservationNotFound
+		return domain.Observation{}, fmt.Errorf("%w: %s", ErrObservationNotFound, id)
 	}
 	item, ok := r.items[id]
 	if !ok {
-		return domain.Observation{}, ErrObservationNotFound
+		return domain.Observation{}, fmt.Errorf("%w: %s", ErrObservationNotFound, id)
 	}
 	return item, nil
 }

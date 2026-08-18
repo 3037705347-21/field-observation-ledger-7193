@@ -64,6 +64,10 @@ func (s *ObservationService) Get(id string) (domain.Observation, error) {
 	return s.observations.Get(strings.TrimSpace(id))
 }
 
+func IsObservationNotFound(err error) bool {
+	return errors.Is(err, repository.ErrObservationNotFound)
+}
+
 func (s *ObservationService) List(filter repository.ObservationFilter) []domain.Observation {
 	return s.observations.List(filter)
 }
