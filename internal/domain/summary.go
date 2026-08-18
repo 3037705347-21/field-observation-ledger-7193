@@ -14,10 +14,7 @@ type Summary struct {
 }
 
 func NewSummary() Summary {
-	return Summary{
-		BySpecies: make(map[string]int),
-		ByStatus:  make(map[string]int),
-	}
+	return Summary{}
 }
 
 func (s *Summary) Add(observation Observation) {
