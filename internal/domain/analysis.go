@@ -28,3 +28,10 @@ type Analysis struct {
 	ActiveSites  int               `json:"active_sites"`
 	ReviewEvents int               `json:"review_events"`
 }
+
+func (a *Analysis) SetReviewEvents(count int) {
+	if count < 0 {
+		count = 0
+	}
+	a.ReviewEvents = count
+}

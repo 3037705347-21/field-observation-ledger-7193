@@ -31,7 +31,7 @@ func New(settings config.Settings) *Application {
 		Species:      service.NewSpeciesService(catalog.Species),
 		Sites:        service.NewSiteService(catalog.Sites),
 		Reviews:      service.NewReviewService(observations, catalog.Reviews, timeSource),
-		Summary:      service.NewSummaryService(catalog.Observations),
+		Summary:      service.NewSummaryService(catalog.Observations, catalog.Reviews),
 		Evidence:     evidence,
 		Notes:        notes,
 	}

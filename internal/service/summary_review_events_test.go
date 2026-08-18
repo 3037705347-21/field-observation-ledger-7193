@@ -25,7 +25,7 @@ func TestSummaryReviewEventsReflectHistory(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	summary := NewSummaryService(catalog.Observations).Build(repository.ObservationFilter{})
+	summary := NewSummaryService(catalog.Observations, catalog.Reviews).Build(repository.ObservationFilter{})
 	if summary.Analysis.ReviewEvents != 1 {
 		t.Fatalf("expected one review event from review history, got %d", summary.Analysis.ReviewEvents)
 	}

@@ -45,3 +45,7 @@ func (r *ReviewRepository) Count() int {
 	defer r.mu.RUnlock()
 	return len(r.items)
 }
+
+func (r *ReviewRepository) HasReviews() bool {
+	return r.Count() > 0
+}

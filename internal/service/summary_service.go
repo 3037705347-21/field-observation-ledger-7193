@@ -8,10 +8,15 @@ import (
 
 type SummaryService struct {
 	observations *repository.ObservationRepository
+	reviews      *repository.ReviewRepository
 }
 
-func NewSummaryService(observations *repository.ObservationRepository) *SummaryService {
-	return &SummaryService{observations: observations}
+func NewSummaryService(observations *repository.ObservationRepository, reviews ...*repository.ReviewRepository) *SummaryService {
+	service := &SummaryService{observations: observations}
+	if len(reviews) > 0 {
+		service.reviews = reviews[0]
+	}
+	return service
 }
 
 func (s *SummaryService) Build(filter repository.ObservationFilter) domain.Summary {
@@ -20,7 +25,12 @@ func (s *SummaryService) Build(filter repository.ObservationFilter) domain.Summa
 	for _, item := range items {
 		summary.Add(item)
 	}
-	summary.Analysis = analysis.BuildReport(items, len(items))
+	reviewEvents := 0
+	if s.reviews != nil {
+		reviewEvents = s.reviews.Count()
+	}
+	summary.Analysis = analysis.BuildReport(items, reviewEvents)
+	summary.Analysis.SetReviewEvents(reviewEvents)
 	return summary
 }
 
