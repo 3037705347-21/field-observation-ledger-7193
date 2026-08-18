@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "name": "field-observation-ledger",
+  "summary": "离线生态调查观察资料服务",
+  "user_roles": ["观察员", "分类员", "审核员", "研究协调员"],
+  "entities": ["observation", "species", "site", "review", "summary"],
+  "workflows": [
+    {
+      "id": "create-observation",
+      "name": "记录观察",
+      "actor": "观察员",
+      "entry": "POST /api/v1/observations",
+      "steps": ["校验地点、物种和数量", "保存草稿观察记录"],
+      "success": "返回 draft 状态的观察记录",
+      "failure": "未知目录项或非法数量返回 400",
+      "verification": "创建后通过查询接口按地点找到记录"
+    },
+    {
+      "id": "review-observation",
+      "name": "审核观察",
+      "actor": "审核员",
+      "entry": "POST /api/v1/reviews/{id}/approve",
+      "steps": ["读取待审核观察记录", "写入审核事件并变更状态"],
+      "success": "观察记录变为 approved",
+      "failure": "已审核或不存在的记录返回 409 或 404",
+      "verification": "审核后查询结果包含 approved 状态"
+    },
+    {
+      "id": "query-summary",
+      "name": "查询摘要",
+      "actor": "研究协调员",
+      "entry": "GET /api/v1/summary",
+      "steps": ["按筛选条件读取观察记录", "聚合状态和物种计数"],
+      "success": "返回稳定的摘要 JSON",
+      "failure": "非法筛选条件返回 400",
+      "verification": "查询地点摘要并确认 total 字段存在"
+    },
+    {
+      "id": "maintain-catalog",
+      "name": "维护目录",
+      "actor": "分类员",
+      "entry": "POST /api/v1/species",
+      "steps": ["校验目录项名称", "保存并返回新目录项"],
+      "success": "新物种可被后续观察记录引用",
+      "failure": "重复标识符返回 409",
+      "verification": "读取物种目录确认新项存在"
+    }
+  ],
+  "module_plan": [
+    {"package": "internal/domain", "workflow_ids": ["create-observation", "review-observation", "query-summary", "maintain-catalog"]},
+    {"package": "internal/repository", "workflow_ids": ["create-observation", "review-observation", "query-summary", "maintain-catalog"]},
+    {"package": "internal/service", "workflow_ids": ["create-observation", "review-observation", "query-summary", "maintain-catalog"]},
+    {"package": "internal/httpapi", "workflow_ids": ["create-observation", "review-observation", "query-summary", "maintain-catalog"]}
+  ],
+  "interfaces": [
+    {"name": "observation API", "workflow_ids": ["create-observation"]},
+    {"name": "review API", "workflow_ids": ["review-observation"]},
+    {"name": "summary API", "workflow_ids": ["query-summary"]},
+    {"name": "catalog API", "workflow_ids": ["maintain-catalog"]}
+  ]
+}

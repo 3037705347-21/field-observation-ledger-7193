@@ -1,0 +1,48 @@
+{
+  "shape": "backend",
+  "service": {
+    "command": "go run ./cmd/observer",
+    "startup_timeout_seconds": 25,
+    "health": {
+      "url": "http://127.0.0.1:18080/health",
+      "status": 200,
+      "contains": "\"status\":\"ok\""
+    },
+    "api": {
+      "url": "http://127.0.0.1:18080/api/v1/sites",
+      "status": 200,
+      "contains": "alpine"
+    }
+  },
+  "workflow_checks": [
+    {
+      "workflow_id": "create-observation",
+      "url": "http://127.0.0.1:18080/api/v1/observations",
+      "method": "POST",
+      "body": "{\"id\":\"obs-audit\",\"site_id\":\"site-alpine\",\"species_id\":\"sp-robin\",\"observed_at\":\"2026-08-18T09:30:00Z\",\"count\":2,\"notes\":\"runtime audit\"}",
+      "status": 201,
+      "contains": "\"status\":\"draft\""
+    },
+    {
+      "workflow_id": "review-observation",
+      "url": "http://127.0.0.1:18080/api/v1/reviews/obs-audit/approve",
+      "method": "POST",
+      "body": "{\"reviewer\":\"runtime-auditor\",\"comment\":\"accepted\"}",
+      "status": 200,
+      "contains": "\"status\":\"approved\""
+    },
+    {
+      "workflow_id": "query-summary",
+      "url": "http://127.0.0.1:18080/api/v1/summary?site_id=site-alpine",
+      "status": 200,
+      "contains": "\"total\""
+    },
+    {
+      "workflow_id": "maintain-catalog",
+      "url": "http://127.0.0.1:18080/api/v1/species",
+      "method": "GET",
+      "status": 200,
+      "contains": "sp-robin"
+    }
+  ]
+}
