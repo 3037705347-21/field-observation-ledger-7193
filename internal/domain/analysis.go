@@ -14,6 +14,16 @@ type ObservationWindow struct {
 	Days  int       `json:"days"`
 }
 
+func CalendarDays(first, last time.Time) int {
+	firstDay := time.Date(first.Year(), first.Month(), first.Day(), 0, 0, 0, 0, first.Location())
+	lastDay := time.Date(last.Year(), last.Month(), last.Day(), 0, 0, 0, 0, last.Location())
+	days := int(lastDay.Sub(firstDay).Hours()/24) + 1
+	if days < 1 {
+		return 1
+	}
+	return days
+}
+
 type QualityReport struct {
 	Score             int      `json:"score"`
 	CompleteRecords   int      `json:"complete_records"`

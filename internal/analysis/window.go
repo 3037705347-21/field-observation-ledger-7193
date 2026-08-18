@@ -13,17 +13,14 @@ func ObservationWindow(items []domain.Observation) domain.ObservationWindow {
 	}
 	dates := make([]time.Time, 0, len(items))
 	for _, item := range items {
-		dates = append(dates, item.ObservedAt)
+		dates = append(dates, item.CalendarDay())
 	}
 	sort.Slice(dates, func(i, j int) bool {
 		return dates[i].Before(dates[j])
 	})
 	first := dates[0]
 	last := dates[len(dates)-1]
-	days := int(last.Sub(first).Hours()/24) + 1
-	if days < 1 {
-		days = 1
-	}
+	days := domain.CalendarDays(first, last)
 	return domain.ObservationWindow{First: first, Last: last, Days: days}
 }
 

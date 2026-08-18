@@ -29,3 +29,8 @@ func (o Observation) IsReviewable() bool {
 func (o Observation) IsVisible() bool {
 	return o.Status != ""
 }
+
+func (o Observation) CalendarDay() time.Time {
+	year, month, day := o.ObservedAt.Date()
+	return time.Date(year, month, day, 0, 0, 0, 0, o.ObservedAt.Location())
+}

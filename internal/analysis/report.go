@@ -7,11 +7,15 @@ import (
 func BuildReport(items []domain.Observation, reviewEvents int) domain.Analysis {
 	return domain.Analysis{
 		TopSpecies:   RankSpecies(items, 5),
-		Window:       ObservationWindow(items),
+		Window:       BuildObservationWindow(items),
 		Quality:      Quality(items),
 		ActiveSites:  ActiveSiteCount(items),
 		ReviewEvents: reviewEvents,
 	}
+}
+
+func BuildObservationWindow(items []domain.Observation) domain.ObservationWindow {
+	return ObservationWindow(items)
 }
 
 func MergeReports(left, right domain.Analysis) domain.Analysis {
