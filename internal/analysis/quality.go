@@ -19,7 +19,7 @@ func Quality(items []domain.Observation) domain.QualityReport {
 	}
 	total := report.CompleteRecords + report.IncompleteRecords
 	if total > 0 {
-		report.Score = report.CompleteRecords * 100 / total
+		report.Score = report.CompleteRecords / total * 100
 	}
 	return report
 }
