@@ -17,10 +17,7 @@ func Quality(items []domain.Observation) domain.QualityReport {
 		report.IncompleteRecords++
 		report.Warnings = appendUnique(report.Warnings, warnings...)
 	}
-	total := report.CompleteRecords + report.IncompleteRecords
-	if total > 0 {
-		report.Score = report.CompleteRecords / total * 100
-	}
+	report.RecalculateScore()
 	return report
 }
 

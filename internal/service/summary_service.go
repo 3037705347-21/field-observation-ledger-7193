@@ -21,6 +21,7 @@ func (s *SummaryService) Build(filter repository.ObservationFilter) domain.Summa
 		summary.Add(item)
 	}
 	summary.Analysis = analysis.BuildReport(items, len(items))
+	summary.Analysis.Quality.RecalculateScore()
 	return summary
 }
 

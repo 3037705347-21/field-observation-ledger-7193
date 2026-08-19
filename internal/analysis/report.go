@@ -29,5 +29,6 @@ func MergeReports(left, right domain.Analysis) domain.Analysis {
 	}
 	merged.Quality.CompleteRecords += right.Quality.CompleteRecords
 	merged.Quality.IncompleteRecords += right.Quality.IncompleteRecords
+	merged.Quality.RecalculateScore()
 	return merged
 }

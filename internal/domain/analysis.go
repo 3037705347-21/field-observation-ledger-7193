@@ -21,6 +21,15 @@ type QualityReport struct {
 	Warnings          []string `json:"warnings,omitempty"`
 }
 
+func (r *QualityReport) RecalculateScore() {
+	total := r.CompleteRecords + r.IncompleteRecords
+	if total == 0 {
+		r.Score = 0
+		return
+	}
+	r.Score = r.CompleteRecords * 100 / total
+}
+
 type Analysis struct {
 	TopSpecies   []SpeciesRank     `json:"top_species"`
 	Window       ObservationWindow `json:"window"`
