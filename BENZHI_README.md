@@ -1,4 +1,4 @@
-# field-observation-ledger-7193 Docker 交付说明
+# field-observation-ledger__010 Docker 交付说明
 
 ## 项目概览
 - Field Observation Ledger is an offline-friendly Go HTTP service for ecological field teams. It keeps observation records connected to species and field sites, then supports review 
@@ -20,8 +20,8 @@ go run ./cmd/observer
 ## Docker 构建
 
 ```bash
-./build_benzhi_docker.sh field-observation-ledger-7193-benzhi linux/amd64
-docker run --rm -it field-observation-ledger-7193-benzhi bash
+./build_benzhi_docker.sh field-observation-ledger__010-benzhi linux/amd64
+docker run --rm -it field-observation-ledger__010-benzhi bash
 ```
 
 ## 环境
