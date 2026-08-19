@@ -56,3 +56,8 @@ func (r *NoteRepository) ListForObservation(observationID string) []domain.Field
 func (r *NoteRepository) CountForObservation(observationID string) int {
 	return len(r.ListForObservation(observationID))
 }
+
+func cloneFieldNote(item domain.FieldNote) domain.FieldNote {
+    item.Tags = append([]string(nil), item.Tags...)
+    return item
+}
