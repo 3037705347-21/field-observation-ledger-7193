@@ -31,7 +31,7 @@ func (r *NoteRepository) Create(item domain.FieldNote) error {
 	if _, exists := r.items[item.ID]; exists {
 		return ErrNoteExists
 	}
-	r.items[item.ID] = item
+	r.items[item.ID] = cloneFieldNote(item)
 	return nil
 }
 
@@ -41,7 +41,7 @@ func (r *NoteRepository) ListForObservation(observationID string) []domain.Field
 	items := make([]domain.FieldNote, 0)
 	for _, item := range r.items {
 		if item.ObservationID == observationID {
-			items = append(items, item)
+			items = append(items, cloneFieldNote(item))
 		}
 	}
 	sort.Slice(items, func(i, j int) bool {
@@ -58,6 +58,6 @@ func (r *NoteRepository) CountForObservation(observationID string) int {
 }
 
 func cloneFieldNote(item domain.FieldNote) domain.FieldNote {
-    item.Tags = append([]string(nil), item.Tags...)
-    return item
+	item.Tags = append([]string(nil), item.Tags...)
+	return item
 }
