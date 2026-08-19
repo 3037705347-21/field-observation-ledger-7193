@@ -19,7 +19,7 @@ func parsePage(request *http.Request) pageOptions {
 		}
 	}
 	if raw := strings.TrimSpace(request.URL.Query().Get("limit")); raw != "" {
-		if value, err := strconv.Atoi(raw); err == nil && value > 0 && value <= 200 {
+		if value, err := strconv.Atoi(raw); err == nil && value >= 0 && value <= 200 {
 			options.Limit = value
 		}
 	}
