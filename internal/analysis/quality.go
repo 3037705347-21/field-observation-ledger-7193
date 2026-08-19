@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"math"
 	"strings"
 
 	"example.com/field-observation-ledger/internal/domain"
@@ -19,7 +20,7 @@ func Quality(items []domain.Observation) domain.QualityReport {
 	}
 	total := report.CompleteRecords + report.IncompleteRecords
 	if total > 0 {
-		report.Score = report.CompleteRecords / total * 100
+		report.Score = int(math.Round(float64(report.CompleteRecords) / float64(total) * 100))
 	}
 	return report
 }
