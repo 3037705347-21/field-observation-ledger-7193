@@ -21,15 +21,26 @@ func (s *SpeciesService) Create(item domain.Species) (domain.Species, error) {
 	if err := s.repository.Create(item); err != nil {
 		return domain.Species{}, err
 	}
-	return item, nil
+	// Return an isolated copy so the caller cannot mutate the stored record
+	// through the returned Tags slice.
+	return item.Clone(), nil
 }
 
 func (s *SpeciesService) Get(id string) (domain.Species, error) {
-	return s.repository.Get(id)
+	item, err := s.repository.Get(id)
+	if err != nil {
+		return domain.Species{}, err
+	}
+	return item.Clone(), nil
 }
 
 func (s *SpeciesService) List() []domain.Species {
-	return s.repository.List()
+	items := s.repository.List()
+	isolated := make([]domain.Species, len(items))
+	for index := range items {
+		isolated[index] = items[index].Clone()
+	}
+	return isolated
 }
 
 func (s *SpeciesService) Has(id string) bool {

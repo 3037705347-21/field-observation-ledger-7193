@@ -32,3 +32,17 @@ func (s Species) HasTag(tag string) bool {
 	}
 	return false
 }
+
+// Clone returns a deep copy of the species so that callers cannot mutate the
+// Tags slice (or any future slice field) backing the repository's stored copy.
+// Sharing the underlying array would let a single returned value corrupt both
+// the stored record and every subsequent query.
+func (s Species) Clone() Species {
+	cloned := s
+	if s.Tags != nil {
+		tags := make([]string, len(s.Tags))
+		copy(tags, s.Tags)
+		cloned.Tags = tags
+	}
+	return cloned
+}
