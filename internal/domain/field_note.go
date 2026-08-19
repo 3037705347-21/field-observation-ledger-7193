@@ -11,6 +11,11 @@ type FieldNote struct {
 	CreatedAt     time.Time `json:"created_at"`
 }
 
+func (n FieldNote) Clone() FieldNote {
+	n.Tags = append([]string(nil), n.Tags...)
+	return n
+}
+
 func (n FieldNote) HasTag(target string) bool {
 	if target == "" {
 		return false

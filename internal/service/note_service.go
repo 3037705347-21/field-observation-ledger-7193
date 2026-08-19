@@ -51,11 +51,11 @@ func (s *NoteService) Add(observationID, author, text string, tags []string) (do
 	if err := s.repository.Create(note); err != nil {
 		return domain.FieldNote{}, err
 	}
-	return note, nil
+	return note.Clone(), nil
 }
 
 func (s *NoteService) List(observationID string) []domain.FieldNote {
-	return s.repository.ListForObservation(observationID)
+	return cloneNotes(s.repository.ListForObservation(observationID))
 }
 
 func (s *NoteService) Count(observationID string) int {
@@ -73,4 +73,12 @@ func cleanTags(tags []string) []string {
 		}
 	}
 	return result
+}
+
+func cloneNotes(items []domain.FieldNote) []domain.FieldNote {
+	clones := make([]domain.FieldNote, len(items))
+	for i, item := range items {
+		clones[i] = item.Clone()
+	}
+	return clones
 }

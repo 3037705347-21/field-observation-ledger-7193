@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"example.com/field-observation-ledger/internal/domain"
 	"example.com/field-observation-ledger/internal/service"
 )
 
@@ -19,7 +20,7 @@ func (s *Server) listNotes(writer http.ResponseWriter, request *http.Request) {
 	if !ok {
 		return
 	}
-	writeJSON(writer, http.StatusOK, map[string]any{"items": s.deps.Notes.List(id)})
+	writeJSON(writer, http.StatusOK, map[string]any{"items": cloneNoteResponses(s.deps.Notes.List(id))})
 }
 
 func (s *Server) addNote(writer http.ResponseWriter, request *http.Request) {
@@ -38,4 +39,12 @@ func (s *Server) addNote(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	writeJSON(writer, http.StatusCreated, item)
+}
+
+func cloneNoteResponses(items []domain.FieldNote) []domain.FieldNote {
+	clones := make([]domain.FieldNote, len(items))
+	for i, item := range items {
+		clones[i] = item.Clone()
+	}
+	return clones
 }
