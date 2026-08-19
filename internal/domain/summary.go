@@ -14,7 +14,14 @@ type Summary struct {
 }
 
 func NewSummary() Summary {
-	return Summary{}
+	return Summary{
+		// Pre-initialize the aggregation maps so Add can always write to them
+		// (avoiding "assignment to entry in nil map" panics) and so they
+		// serialize as JSON objects rather than null when there are no
+		// matching observations.
+		BySpecies: map[string]int{},
+		ByStatus:  map[string]int{},
+	}
 }
 
 func (s *Summary) Add(observation Observation) {
