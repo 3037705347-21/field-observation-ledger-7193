@@ -27,7 +27,7 @@ func (s *Server) listObservations(writer http.ResponseWriter, request *http.Requ
 	}
 	items := s.deps.Observations.List(filter)
 	writeJSON(writer, http.StatusOK, map[string]any{
-		"items": paginate(items, parsePage(request)),
+		"items": paginate(items, parsePage(request, s.deps.PageLimit)),
 		"total": len(items),
 	})
 }

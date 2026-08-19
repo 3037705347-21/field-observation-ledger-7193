@@ -2,14 +2,17 @@ package config
 
 import "os"
 
+const DefaultPageSize = 50
+
 type Settings struct {
-	Address string
+	Address  string
+	PageSize int
 }
 
-func Load() Settings {
-	address := os.Getenv("OBSERVE_ADDR")
-	if address == "" {
-		address = "127.0.0.1:18080"
-	}
-	return Settings{Address: address}
+func (s Settings) WithDefaults() Settings {
+	if s.Address == "" { s.Address = "127.0.0.1:18080" }
+	if s.PageSize <= 0 { s.PageSize = DefaultPageSize }
+	return s
 }
+
+func Load() Settings { return Settings{Address: os.Getenv("OBSERVE_ADDR")}.WithDefaults() }
